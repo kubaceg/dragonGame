@@ -15,11 +15,10 @@ void Flames::draw()
 
     for ( list<SDL_Rect >::iterator iter = flames.begin(); iter != flames.end(); iter++ )
     {
-        if ((*iter).w != 0)
-            SDL_BlitSurface(flame, NULL, screen, &(*iter));
+        SDL_BlitSurface(flame, NULL, screen, &(*iter));
 
-        (*iter).x--;
-        if ((*iter).x == 0) iter = flames.erase(iter);
+        (*iter).x = (*iter).x - 2;;
+        if ((*iter).x < 0) iter = flames.erase(iter);
     }
 }
 
