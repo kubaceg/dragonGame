@@ -3,32 +3,26 @@
 Hud::Hud(SDL_Surface *sc)
 {
     screen = sc;
-    font = loadfont("graph/Aller_Rg.ttf", 60);
-    color = {255, 255, 255};
+    font = loadfont("graph/font.ttf", 40);
+    color = {255, 50, 100};
+    position = {10,10};
 }
 
 void Hud::draw(int points)
 {
-    SDL_Surface *text;
-    SDL_Rect offset;
-    offset.x = 10;
-    offset.y = 10;
     char str[5];
-
     sprintf(str, "%d", points);
-    SDL_Surface* surface = drawtext(font, 255, 255, 255, 70, 0, 0, 0, 0, str);
+    SDL_Surface* text;
+    text = drawtext(font, color, str);
 
-    SDL_BlitSurface(surface, NULL, screen, NULL);
+    SDL_BlitSurface(text, NULL, screen, &position);
 }
 
-SDL_Surface* Hud::drawtext(TTF_Font* fonttodraw, char fgR, char fgG, char fgB, char fgA, 
-        char bgR, char bgG, char bgB, char bgA, char text[])
+SDL_Surface* Hud::drawtext(TTF_Font* font, SDL_Color color, char text[])
 {
-    SDL_Color tmpfontcolor = {fgR,fgG,fgB,fgA};
-    SDL_Color tmpfontbgcolor = {bgR, bgG, bgB, bgA};
     SDL_Surface* resulting_text;
 
-    resulting_text = TTF_RenderText_Solid(fonttodraw, text, tmpfontcolor);
+    resulting_text = TTF_RenderText_Solid(font, text, color);
 
     return resulting_text;
 }

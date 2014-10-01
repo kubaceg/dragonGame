@@ -1,7 +1,7 @@
 OUT = dragon
 CXX = g++
 SDL = `sdl-config --cflags --libs`
-LIBS =  -lSDL_ttf -lSDL_image -std=c++11
+LIBS =  -lSDL_ttf -lSDL_image -std=c++11 -Wno-write-strings 
 SRC = src/*.cpp src/*.h 
 
 all: $(OUT)
