@@ -6,7 +6,7 @@ SRC = src/*.cpp src/*.h
 
 all: $(OUT)
 $(OUT): $(SRC)
-	$(CXX) $(SRC) $(SDL) $(LIBS) -o $(OUT)
+	$(CXX) $(SRC) $(SDL) $(LIBS) -o $(OUT) -g
 
 clean: 
-	rm $(OUT)
+	rm $(OUT) 
