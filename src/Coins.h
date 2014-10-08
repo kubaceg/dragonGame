@@ -11,6 +11,7 @@ class Coins
 private:
     int position, frameCount, flameX, flameYmin, flameY, points, level;
     list<SDL_Rect> coinsPosition;
+    SDL_Rect rectangle;
     SDL_Surface* coin[9];
     SDL_Surface* screen;
     void generateCoin();

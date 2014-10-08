@@ -1,12 +1,15 @@
 #include "Coins.h"
 
-Coins::Coins(SDL_Surface *sc)
-{
+Coins::Coins(SDL_Surface *sc) {
     screen = sc;
     position = 0;
     frameCount = 0;
     level = 5;
 
+    rectangle.x = 7;
+    rectangle.y = 7;
+    rectangle.w = 25;
+    rectangle.h = 25;
 
     coin[0] = IMG_Load("graph/coin/goldCoin1.png");
     coin[1] = IMG_Load("graph/coin/goldCoin2.png");
@@ -19,30 +22,31 @@ Coins::Coins(SDL_Surface *sc)
     coin[8] = IMG_Load("graph/coin/goldCoin9.png");
 }
 
-void Coins::draw()
-{
+void Coins::draw() {
     frameCount++;
-    if (frameCount == 10)
-    {
+    if (frameCount == 10) {
         position++;
         if (position == 9) position = 0;
         frameCount = 0;
         level--;
     }
-    
-    generateCoin();
 
-    for (list<SDL_Rect>::iterator iter = coinsPosition.begin(); iter != coinsPosition.end(); iter++)
-    {
+    generateCoin();
+           
+    coinsPosition.remove_if(
+            [](SDL_Rect& elem) {
+                //TODO get screen width from varible
+                return elem.x == 640;
+            });
+            
+    for (list<SDL_Rect>::iterator iter = coinsPosition.begin(); iter != coinsPosition.end(); iter++) {        
         (*iter).x++;
-        SDL_BlitSurface(coin[position], NULL, screen, &(*iter));
+        SDL_BlitSurface(coin[position], &rectangle, screen, &(*iter));
     }
 }
 
-void Coins::generateCoin()
-{
-    if(level == 0) 
-    {
+void Coins::generateCoin() {
+    if (level == 0) {
         SDL_Rect coinPos;
         coinPos.x = 0;
         coinPos.y = generateCoinYPosition();
@@ -53,25 +57,22 @@ void Coins::generateCoin()
     }
 }
 
-int Coins::generateCoinYPosition()
-{
+int Coins::generateCoinYPosition() {
     return std::rand() % screen->h;
 }
 
-int Coins::detectColision(list<SDL_Rect> *flames)
-{
+int Coins::detectColision(list<SDL_Rect> *flames) {
     points = 0;
 
-    for ( list<SDL_Rect >::iterator flame = (*flames).begin(); flame != (*flames).end(); flame++ )
-    {
+    for (list<SDL_Rect >::iterator flame = (*flames).begin(); flame != (*flames).end(); flame++) {
         flameX = (*flame).x;
         flameYmin = (*flame).y;
         flameY = (*flame).y + ((*flame).h * 0.5);
 
-        for ( list<SDL_Rect >::iterator coin = coinsPosition.begin(); coin != coinsPosition.end(); coin++ )
-        {
-            if(flameX == (*coin).x+(*coin).w) {
-                if((*coin).y < flameY && ((*coin).y+(*coin).h) > flameY){
+        for (list<SDL_Rect >::iterator coin = coinsPosition.begin(); coin != coinsPosition.end(); coin++) {
+            int size = (int) coinsPosition.size();
+            if (flameX < (*coin).x + (*coin).w) {
+                if ((*coin).y < flameY && ((*coin).y + (*coin).h) > flameY) {
                     coin = coinsPosition.erase(coin);
                     flame = (*flames).erase(flame);
                     points++;
