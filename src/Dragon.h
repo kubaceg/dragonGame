@@ -13,7 +13,7 @@ private:
 
 public:
     void draw();
-    void move(SDL_Rect pos);
+    void move(SDL_Rect *pos);
     Dragon(SDL_Surface* sc);
 };
 #endif

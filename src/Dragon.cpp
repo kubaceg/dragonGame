@@ -65,7 +65,8 @@ void Dragon::draw()
     frameCount++;
 }
 
-void Dragon::move(SDL_Rect pos){
-    destination = pos;
+void Dragon::move(SDL_Rect *pos){
+    destination.x = pos->x;
+    destination.y = pos->y;
     draw();
 }

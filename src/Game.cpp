@@ -1,79 +1,50 @@
-#include "Dragon.h"
-#include "World.h"
-#include "Coins.h"
-#include "Flames.h"
-#include "Hud.h"
+#include "Game.h"
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
-const char *WINDOW_TITLE = "Dragon";
-
-Dragon *dr = NULL;
-World *wr = NULL;
-Coins *co = NULL;
-Flames * fl = NULL;
-Hud *hd = NULL;
-
-int FPS = 60;
-int NextTick , interval ;
-void FPS_Initial(void)
-{
-    NextTick = 0 ;
-    interval = 1 * 1000 / FPS ;
-    return;
+Game::Game() {
+    Init();
 }
 
-void FPS_Fn(void)
-{
-    if ( NextTick > SDL_GetTicks( ) ) SDL_Delay( NextTick - SDL_GetTicks( ) );
-    NextTick = SDL_GetTicks( ) + interval ;
-    return;
-}
+bool Game::Init() {
+    if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
+        return false;
+    }
 
-int main(int argc, char **argv)
-{
-    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
-           {
-                   return false;    
-               }
+    if (TTF_Init() == -1) {
+        return false;
+    }
+    SDL_Init(SDL_INIT_VIDEO);
 
-     if( TTF_Init() == -1 )
-            {
-                    return false;    
-                }
-    SDL_Init( SDL_INIT_VIDEO );
-
-    SDL_Surface *screen = SDL_SetVideoMode( WINDOW_WIDTH, WINDOW_HEIGHT, 0,
-                                            SDL_HWSURFACE | SDL_DOUBLEBUF );
-    SDL_WM_SetCaption( WINDOW_TITLE, 0 );
-
+    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
+    SDL_WM_SetCaption(WINDOW_TITLE, 0);
+    
+    points = pidx = aTick = 0;
+    bKeyUP = bKeyDOWN = bKeyLEFT = bKeyRIGHT = false;
+    
+    //Init Game objects 
     dr = new Dragon(screen);
     wr = new World(screen);
     co = new Coins(screen);
     fl = new Flames(screen);
     hd = new Hud(screen);
+    
+    dragonPosition = new SDL_Rect();
+    dragonPosition->x = 500;
+    dragonPosition->y = 100;
+    dragonPosition->w = 65;
+    dragonPosition->h = 44;
+}
 
-
-    SDL_Event event;
-    bool gameRunning = true;
-    bool bKeyUP = 0 , bKeyDOWN = 0 , bKeyLEFT = 0 , bKeyRIGHT = 0;
-    int pidx = 0 , aTick = 0, points = 0;
-
-    SDL_Rect destination;
-    destination.x = 500;
-    destination.y = 100;
-    destination.w = 65;
-    destination.h = 44;
-
+void Game::Run() {
     FPS_Initial( );
 
+    gameRunning = true;
     while (gameRunning)
     {
         aTick++;
 
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 138, 255));
         wr->draw();
-        dr->move(destination);
+        dr->move(dragonPosition);
 
         fl->draw();
 
@@ -84,12 +55,12 @@ int main(int argc, char **argv)
         SDL_Flip(screen);
 
         FPS_Fn();
-        if (SDL_PollEvent(&event))
+        if (SDL_PollEvent(event))
         {
 
-            SDLKey keyPressed = event.key.keysym.sym;
-
-            switch (event.type)
+            SDLKey keyPressed = event->key.keysym.sym;
+ 
+            switch (event->type)
             {
             case SDL_KEYDOWN:
                 switch ( keyPressed )
@@ -110,7 +81,7 @@ int main(int argc, char **argv)
                     gameRunning = false;
                     break;
                 case SDLK_SPACE:
-                    fl->shot(destination);
+                    fl->shot(dragonPosition);
                     break;
                 }
                 break;
@@ -139,12 +110,23 @@ int main(int argc, char **argv)
             }
 
         }
-        if (bKeyUP) destination.y = destination.y - 1;
-        if (bKeyDOWN) destination.y = destination.y + 1;
-        if (bKeyLEFT) destination.x = destination.x - 1;
-        if (bKeyRIGHT) destination.x = destination.x + 1;
+        if (bKeyUP) dragonPosition->y = dragonPosition->y - 1;
+        if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
+        if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
+        if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
     }
     SDL_Quit();
+}
 
-    return 0;
+void Game::FPS_Initial()
+{
+    NextTick = 0 ;
+    interval = 1 * 1000 / FPS ;
+    return;
+}
+
+void Game::FPS_Fn() {
+    if (NextTick > SDL_GetTicks()) SDL_Delay(NextTick - SDL_GetTicks());
+    NextTick = SDL_GetTicks() + interval;
+    return;
 }

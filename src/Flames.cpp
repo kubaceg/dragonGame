@@ -22,11 +22,11 @@ void Flames::draw()
     }
 }
 
-void Flames::shot(SDL_Rect dragonPosition)
+void Flames::shot(SDL_Rect *dragonPosition)
 {
     if(frameCount > 10) {
-        flamePosition.x = dragonPosition.x - 16;
-        flamePosition.y = dragonPosition.y + 26;
+        flamePosition.x = dragonPosition->x - 16;
+        flamePosition.y = dragonPosition->y + 26;
         flamePosition.w = 16;
         flamePosition.h = 12;
 

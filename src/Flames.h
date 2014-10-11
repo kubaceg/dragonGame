@@ -16,7 +16,7 @@ private:
 
 public:
     void draw();
-    void shot(SDL_Rect dragonPosition);
+    void shot(SDL_Rect *dragonPosition);
     Flames(SDL_Surface* sc);
     list<SDL_Rect>* getFlamePositions();
 };
