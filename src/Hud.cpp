@@ -8,7 +8,13 @@ Hud::Hud(SDL_Surface *sc)
     position = {10,10};
 }
 
-void Hud::draw(int points)
+void Hud::draw(int points, int ammo)
+{
+    drawPoints(points);
+    drawAmmoBar(ammo);
+}
+
+void Hud::drawPoints(int points) 
 {
     char str[5];
     sprintf(str, "%d", points);
@@ -35,4 +41,11 @@ TTF_Font* Hud::loadfont(char* file, int ptsize)
         printf("Unable to load font: %s %s \n", file, TTF_GetError());
     }
     return tmpfont;
+}
+
+void Hud::drawAmmoBar(int ammo)
+{
+    int screenWidth = 640;
+    rectangleRGBA(screen, screenWidth-151, 10, screenWidth-49, 30, 255, 255, 255, 255);
+    boxRGBA(screen, screenWidth-150, 11, screenWidth-150+ammo, 29, 255, 0, 0, 255);
 }

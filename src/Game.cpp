@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Ammo.h"
 
 Game::Game() {
     Init();
@@ -26,6 +27,7 @@ bool Game::Init() {
     co = new Coins(screen);
     fl = new Flames(screen);
     hd = new Hud(screen);
+    ammo = new Ammo();
     
     dragonPosition = new SDL_Rect();
     dragonPosition->x = 500;
@@ -43,14 +45,13 @@ void Game::Run() {
         aTick++;
         handleEvent();
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 138, 255));
+        ammo->Charge();
         wr->draw();
         dr->move(dragonPosition);
-
         fl->draw();
-
         co->draw();  
         points += co->detectColision(fl->getFlamePositions());
-        hd->draw(points);
+        hd->draw(points, ammo->getAmmo());
 
         SDL_Flip(screen);
 
@@ -73,11 +74,13 @@ void Game::FPS_Fn() {
 }
 
 void Game::handleEvent() {
-        if (SDL_PollEvent(event))
+        SDL_Event event;
+
+        if (SDL_PollEvent(&event))
         {
-            SDLKey keyPressed = event->key.keysym.sym;
+            SDLKey keyPressed = event.key.keysym.sym;
  
-            switch (event->type)
+            switch (event.type)
             {
             case SDL_KEYDOWN:
                 switch ( keyPressed )
@@ -98,7 +101,9 @@ void Game::handleEvent() {
                     gameRunning = false;
                     break;
                 case SDLK_SPACE:
-                    fl->shot(dragonPosition);
+                    if(ammo->Shot()){
+                        fl->shot(dragonPosition);
+                    }
                     break;
                 }
                 break;

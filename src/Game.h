@@ -5,6 +5,7 @@
 #include "Coins.h"
 #include "Flames.h"
 #include "Hud.h"
+#include "Ammo.h"
 
 class Game {
 private:
@@ -20,6 +21,7 @@ private:
     Coins *co;
     Flames * fl;
     Hud *hd;
+    Ammo *ammo;
     int NextTick, interval, pidx, aTick, points;
 
 public:
