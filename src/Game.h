@@ -10,6 +10,7 @@ class Game {
 private:
     void FPS_Initial(void);
     void FPS_Fn(void);
+    void handleEvent();
     bool Init(void);
     bool gameRunning, bKeyUP, bKeyDOWN, bKeyLEFT, bKeyRIGHT;
     SDL_Event *event;

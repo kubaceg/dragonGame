@@ -41,7 +41,7 @@ void Game::Run() {
     while (gameRunning)
     {
         aTick++;
-
+        handleEvent();
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 138, 255));
         wr->draw();
         dr->move(dragonPosition);
@@ -55,9 +55,26 @@ void Game::Run() {
         SDL_Flip(screen);
 
         FPS_Fn();
+    }
+    SDL_Quit();
+}
+
+void Game::FPS_Initial()
+{
+    NextTick = 0 ;
+    interval = 1 * 1000 / FPS ;
+    return;
+}
+
+void Game::FPS_Fn() {
+    if (NextTick > SDL_GetTicks()) SDL_Delay(NextTick - SDL_GetTicks());
+    NextTick = SDL_GetTicks() + interval;
+    return;
+}
+
+void Game::handleEvent() {
         if (SDL_PollEvent(event))
         {
-
             SDLKey keyPressed = event->key.keysym.sym;
  
             switch (event->type)
@@ -114,19 +131,4 @@ void Game::Run() {
         if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
         if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
         if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
-    }
-    SDL_Quit();
-}
-
-void Game::FPS_Initial()
-{
-    NextTick = 0 ;
-    interval = 1 * 1000 / FPS ;
-    return;
-}
-
-void Game::FPS_Fn() {
-    if (NextTick > SDL_GetTicks()) SDL_Delay(NextTick - SDL_GetTicks());
-    NextTick = SDL_GetTicks() + interval;
-    return;
 }
