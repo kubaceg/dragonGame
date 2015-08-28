@@ -51,13 +51,14 @@ void Clouds::draw() {
         if ((*iter).x == screen->w) {
             iter = clouds.erase(iter);
             cloudVersion.erase(cloudVersion.begin()+i);
+            generate();
         } else {
             i++;
         }
     }
 }
 
-void Clouds::generate(int x = 0) {
+void Clouds::generate(int x) {
     if (level == 0) {
         SDL_Rect cloud;
         int version = generateVersion();
@@ -71,7 +72,7 @@ void Clouds::generate(int x = 0) {
     }
 }
 
-int Clouds::generateYPosition(int cloudHeight = 0) {
+int Clouds::generateYPosition(int cloudHeight) {
     return std::rand() % screen->h - cloudHeight;
 }
 

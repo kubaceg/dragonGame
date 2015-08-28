@@ -16,7 +16,7 @@ private:
     SDL_Surface* screen;
     SDL_Surface* bitmap;
     int frameCount, level;
-    void generate(int x);
+    void generate(int x = 0);
     int generateYPosition(int cloudHeight);
     int generateVersion();
 
