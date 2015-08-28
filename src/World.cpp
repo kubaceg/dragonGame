@@ -36,8 +36,9 @@ void World::draw()
 {
     if (frameCount == 5)
     {
-    	for (int i = 0; i < 4; i++)
-        	destination[i].x = destination[i].x++;
+    	for (int i = 0; i < 4; i++) {
+        	destination[i].x++;
+        }
         frameCount = 0;
     }
     
