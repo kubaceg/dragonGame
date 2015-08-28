@@ -44,11 +44,10 @@ void Clouds::draw() {
 void Clouds::generate(int x = 0) {
     if (level == 0) {
         SDL_Rect cloud;
-        cloud.x = x;
-        cloud.y = generateYPosition();
         int version = generateVersion();
-        cout << version << endl;
 
+        cloud.x = x;
+        cloud.y = generateYPosition(cloudVersionImage[version].h);
         cloud.w = cloudVersionImage[version].w;
         cloud.h = cloudVersionImage[version].h;
         clouds.push_back(cloud);
@@ -56,8 +55,8 @@ void Clouds::generate(int x = 0) {
     }
 }
 
-int Clouds::generateYPosition() {
-    return std::rand() % screen->h;
+int Clouds::generateYPosition(int cloudHeight = 0) {
+    return std::rand() % screen->h - cloudHeight;
 }
 
 int Clouds::generateVersion() {

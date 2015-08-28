@@ -18,7 +18,7 @@ private:
     int frameCount, level;
     void generate(int x);
     int generateXPosition();
-    int generateYPosition();
+    int generateYPosition(int cloudHeight);
     int generateVersion();
 
 public:
