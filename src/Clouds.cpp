@@ -31,11 +31,21 @@ Clouds::Clouds(SDL_Surface *sc) {
     generate(100);
     generate(0);
     generate(500);
+    generate(25);
 }
 
 void Clouds::draw() {
+    frameCount++;
+    int move = 0;
+
+    if(frameCount == 5){
+        move = 1;
+        frameCount = 0;
+    }
+
     int i = 0;
     for (list<SDL_Rect>::iterator iter = clouds.begin(); iter != clouds.end(); iter++) {
+        (*iter).x += move;
         SDL_BlitSurface(bitmap, &cloudVersionImage[cloudVersion[i]], screen, &(*iter));
         i++;
     }
