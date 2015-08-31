@@ -4,7 +4,7 @@
 #include "World.h"
 #include "Coins.h"
 #include "Flames.h"
-#include "Hud.h"
+#include "Hud/Hud.h"
 #include "Ammo.h"
 
 class Game {
