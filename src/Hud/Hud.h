@@ -1,21 +1,11 @@
 #ifndef __HUD_H__
 #define __HUD_H__
-#include "SDL.h"
-#include "SDL/SDL_ttf.h"
-#include "SDL/SDL_gfxPrimitives.h"
-#include <cstdio>
-#include <cstdlib>
-using namespace std;
 
-class Hud
+#include "FontHelper.h"
+
+class Hud : public FontHelper
 {
 private:
-    SDL_Surface* screen;
-    TTF_Font* font;
-    SDL_Color color;
-    SDL_Rect position;
-    TTF_Font* loadfont(char* file, int ptsize);
-    SDL_Surface* drawtext(TTF_Font* font, SDL_Color color, char text[]);
     void drawPoints(int points);
     void drawAmmoBar(int ammo);
 
