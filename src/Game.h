@@ -22,7 +22,7 @@ private:
 
     bool Init(void);
 
-    bool gameRunning, bKeyUP, bKeyDOWN, bKeyLEFT, bKeyRIGHT;
+    bool gameRunning, bKeyUP, bKeyDOWN, bKeyLEFT, bKeyRIGHT, bKeyENTER, bKeyESCAPE;
     SDL_Event *event;
     SDL_Rect *dragonPosition;
     Dragon *dr;

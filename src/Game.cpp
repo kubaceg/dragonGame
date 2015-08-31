@@ -19,8 +19,8 @@ bool Game::Init() {
     SDL_WM_SetCaption(WINDOW_TITLE, 0);
 
     points = pidx = aTick = 0;
-    bKeyUP = bKeyDOWN = bKeyLEFT = bKeyRIGHT = false;
-    currentGameState = GameState::game ;
+    bKeyUP = bKeyDOWN = bKeyLEFT = bKeyRIGHT = bKeyENTER = bKeyESCAPE = false;
+    currentGameState = GameState::menu;
 
     //Init Game objects 
     dr = new Dragon(screen);
@@ -44,9 +44,9 @@ void Game::Run() {
     while (gameRunning) {
         aTick++;
         handleEvent();
-        if(currentGameState == GameState::menu){
+        if (currentGameState == GameState::menu) {
             currentGameState = menu->Run();
-        } else if(currentGameState == GameState::game) {
+        } else if (currentGameState == GameState::game) {
             gameMainLoop();
         }
         FPS_Fn();
@@ -100,7 +100,10 @@ void Game::handleEvent() {
                         bKeyRIGHT = 1;
                         break;
                     case SDLK_ESCAPE:
-                        gameRunning = false;
+                        bKeyESCAPE = 1;
+                        break;
+                    case SDLK_RETURN:
+                        bKeyENTER = 1;
                         break;
                     case SDLK_SPACE:
                         if (ammo->Shot()) {
@@ -123,6 +126,12 @@ void Game::handleEvent() {
                     case SDLK_RIGHT:
                         bKeyRIGHT = 0;
                         break;
+                    case SDLK_RETURN:
+                        bKeyENTER = 0;
+                        break;
+                    case SDLK_ESCAPE:
+                        bKeyESCAPE = 0;
+                        break;
                     default:
                         break;
                 }
@@ -133,8 +142,15 @@ void Game::handleEvent() {
         }
 
     }
-    if (bKeyUP) dragonPosition->y = dragonPosition->y - 1;
-    if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
-    if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
-    if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
+    if (currentGameState == GameState::menu) {
+        if (bKeyENTER) currentGameState = GameState::game;
+        if (bKeyESCAPE) {gameRunning = false; bKeyESCAPE = 0;};
+    }
+    else {
+        if (bKeyUP) dragonPosition->y = dragonPosition->y - 1;
+        if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
+        if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
+        if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
+        if (bKeyESCAPE) currentGameState = GameState::menu;
+    }
 }
