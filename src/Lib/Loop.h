@@ -9,10 +9,11 @@ class Loop {
 
   void FPS_Fn(void);
 
-  virtual void handleEvent() = 0;
+  void handleEvent();
 
   int NextTick, interval, aTick = 0;
-  const int FPS = 60;
+  int FPS = 60;
+  bool running;
 };
 
 #endif
