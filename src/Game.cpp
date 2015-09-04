@@ -144,7 +144,8 @@ void Game::handleEvent() {
     }
     if (currentGameState == GameState::menu) {
         if (bKeyENTER) currentGameState = GameState::game;
-        if (bKeyESCAPE) {gameRunning = false; bKeyESCAPE = 0;};
+        if (bKeyUP) menu->decMenuSelection();
+        if (bKeyDOWN) menu->incMenuSelection();
     }
     else {
         if (bKeyUP) dragonPosition->y = dragonPosition->y - 1;

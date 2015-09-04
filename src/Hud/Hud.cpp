@@ -16,7 +16,7 @@ void Hud::drawPoints(int points)
     char str[5];
     sprintf(str, "%d", points);
     SDL_Surface* text;
-    text = drawtext(font, color, str);
+    text = drawText(font, color, str);
 
     SDL_BlitSurface(text, NULL, screen, &position);
 }

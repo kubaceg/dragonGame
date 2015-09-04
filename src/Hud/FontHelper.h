@@ -18,9 +18,9 @@ protected:
     TTF_Font *font;
 
 
-    TTF_Font *loadfont(char *file, int ptsize);
+    TTF_Font *loadFont(char *file, int ptsize);
 
-    SDL_Surface *drawtext(TTF_Font *font, SDL_Color color, char text[]);
+    SDL_Surface *drawText(TTF_Font *font, SDL_Color color, char text[]);
 
 public:
     FontHelper(SDL_Surface *sc);
