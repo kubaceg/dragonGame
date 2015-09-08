@@ -4,6 +4,7 @@ Menu::Menu(SDL_Surface *sc) : FontHelper(sc) {
   screen = sc;
   selected = 0;
   FPS = 30;
+  position = {30, 30};
 }
 
 GameState Menu::Run() {
@@ -29,6 +30,7 @@ GameState Menu::Run() {
 
 void Menu::drawPosition(string text2, int pos) {
   char *cstr = new char[text2.length() + 1];
+  int textW, textH;
   strcpy(cstr, text2.c_str());
   SDL_Surface *text;
   if (selected==pos) {
@@ -37,8 +39,10 @@ void Menu::drawPosition(string text2, int pos) {
     color = {0, 100, 255};
   }
   text = drawText(font, color, cstr);
+  TTF_SizeText(font, cstr, &textW, &textH);
   SDL_Rect p = position;
   p.y = position.y + (40*pos) + 10;
+  p.x = 320 - (textW/2);
   SDL_BlitSurface(text, NULL, screen, &p);
   delete[] cstr;
 }
