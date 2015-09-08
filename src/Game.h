@@ -45,7 +45,7 @@ public:
 
     void Run(void);
 
-    Game();
+    Game(SDL_Surface* sc);
 };
 
 #endif
