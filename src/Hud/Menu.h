@@ -3,20 +3,25 @@
 
 
 #include "../GameState.h"
-#include "FontHelper.h"
+#include "../Lib/FontHelper.h"
+#include "../Lib/Loop.h"
 #include <string>
 #include <vector>
 
-class Menu : public FontHelper {
-private:
-    vector<string> positions = {"New game", "Quit"};
-    void drawPosition(string text, int i);
-public:
-    int selected;
-    Menu(SDL_Surface *sc);
-    void incMenuSelection();
-    void decMenuSelection();
-    GameState Run();
+class Menu: public FontHelper, public Loop {
+ private:
+  vector <string> positions = {"New game", "Quit"};
+  bool bKeyUP, bKeyDOWN, bKeyENTER, bKeyESCAPE;
+  void drawPosition(string text, int i);
+  void handleEvent();
+  GameState getSelectedState();
+ public:
+  int selected;
+  Menu(SDL_Surface *sc);
+  void incMenuSelection();
+  void decMenuSelection();
+  GameState Run();
+  Menu();
 };
 
 

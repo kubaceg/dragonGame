@@ -1,26 +1,13 @@
 #include "Game.h"
-#include "Ammo.h"
 
-Game::Game() {
+Game::Game(SDL_Surface *sc) {
+    screen = sc;
     Init();
 }
 
 bool Game::Init() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
-        return false;
-    }
-
-    if (TTF_Init() == -1) {
-        return false;
-    }
-    SDL_Init(SDL_INIT_VIDEO);
-
-    screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    SDL_WM_SetCaption(WINDOW_TITLE, 0);
-
     points = pidx = aTick = 0;
     bKeyUP = bKeyDOWN = bKeyLEFT = bKeyRIGHT = bKeyENTER = bKeyESCAPE = false;
-    currentGameState = GameState::menu;
 
     //Init Game objects 
     dr = new Dragon(screen);
@@ -29,7 +16,6 @@ bool Game::Init() {
     fl = new Flames(screen);
     hd = new Hud(screen);
     ammo = new Ammo();
-    menu = new Menu(screen);
 
     dragonPosition = new SDL_Rect();
     dragonPosition->x = 500;
@@ -38,21 +24,18 @@ bool Game::Init() {
     dragonPosition->h = 44;
 }
 
-void Game::Run() {
+GameState Game::Run() {
     FPS_Initial();
-    gameRunning = true;
-    while (gameRunning) {
+    running = true;
+    while (running) {
         aTick++;
         handleEvent();
-        if (currentGameState == GameState::menu) {
-            currentGameState = menu->Run();
-        } else if (currentGameState == GameState::game) {
-            gameMainLoop();
-        }
+        gameMainLoop();
         FPS_Fn();
         SDL_Flip(screen);
     }
-    SDL_Quit();
+
+    return currentGameState;
 }
 
 void Game::gameMainLoop() {
@@ -64,18 +47,6 @@ void Game::gameMainLoop() {
     co->draw();
     points += co->detectColision(fl->getFlamePositions());
     hd->draw(points, ammo->getAmmo());
-}
-
-void Game::FPS_Initial() {
-    NextTick = 0;
-    interval = 1 * 1000 / FPS;
-    return;
-}
-
-void Game::FPS_Fn() {
-    if (NextTick > SDL_GetTicks()) SDL_Delay(NextTick - SDL_GetTicks());
-    NextTick = SDL_GetTicks() + interval;
-    return;
 }
 
 void Game::handleEvent() {
@@ -137,21 +108,19 @@ void Game::handleEvent() {
                 }
                 break;
             case SDL_QUIT:
-                gameRunning = false;
+                running = false;
                 break;
         }
 
-    }
-    if (currentGameState == GameState::menu) {
-        if (bKeyENTER) currentGameState = GameState::game;
-        if (bKeyUP) menu->decMenuSelection();
-        if (bKeyDOWN) menu->incMenuSelection();
     }
     else {
         if (bKeyUP) dragonPosition->y = dragonPosition->y - 1;
         if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
         if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
         if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
-        if (bKeyESCAPE) currentGameState = GameState::menu;
+        if (bKeyESCAPE) {
+            currentGameState = GameState::menu;
+            running = false;
+        }
     }
 }

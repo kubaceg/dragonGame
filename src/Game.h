@@ -7,22 +7,19 @@
 #include "Flames.h"
 #include "Hud/Hud.h"
 #include "Hud/Menu.h"
+#include "Lib/Loop.h"
 #include "Ammo.h"
 #include "GameState.h"
 
-class Game {
+class Game : public Loop {
 private:
-    void FPS_Initial(void);
-
-    void FPS_Fn(void);
-
     void handleEvent();
 
     void gameMainLoop();
 
     bool Init(void);
 
-    bool gameRunning, bKeyUP, bKeyDOWN, bKeyLEFT, bKeyRIGHT, bKeyENTER, bKeyESCAPE;
+    bool bKeyUP, bKeyDOWN, bKeyLEFT, bKeyRIGHT, bKeyENTER, bKeyESCAPE;
     SDL_Event *event;
     SDL_Rect *dragonPosition;
     Dragon *dr;
@@ -37,15 +34,11 @@ private:
 
 
 public:
-    const int WINDOW_WIDTH = 640;
-    const int WINDOW_HEIGHT = 480;
-    const int FPS = 60;
-    const char *WINDOW_TITLE = "Dragon";
     SDL_Surface *screen;
 
-    void Run(void);
+    GameState Run(void);
 
-    Game();
+    Game(SDL_Surface *sc);
 };
 
 #endif
