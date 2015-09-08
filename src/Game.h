@@ -43,7 +43,7 @@ public:
     const char *WINDOW_TITLE = "Dragon";
     SDL_Surface *screen;
 
-    void Run(void);
+    GameState Run(void);
 
     Game(SDL_Surface* sc);
 };

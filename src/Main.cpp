@@ -4,6 +4,7 @@
 #include "Hud/Menu.h"
 #include "GameState.h"
 #include <SDL.h>
+
 using namespace std;
 
 const int WINDOW_WIDTH = 640;
@@ -12,8 +13,9 @@ const char *WINDOW_TITLE = "Dragon";
 SDL_Surface *screen;
 Game *game;
 Menu *menu;
+GameState state;
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
         return false;
     }
@@ -25,7 +27,20 @@ int main(int argc, char** argv) {
 
     screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
     SDL_WM_SetCaption(WINDOW_TITLE, 0);
+    state = GameState::menu;
+    menu = new Menu(screen);
 
-    game = new Game(screen);
-    game->Run();
+    while (state != GameState::exit) {
+        switch (state) {
+            case GameState::menu:
+                state = menu->Run();
+                break;
+            case GameState::new_game:
+                game = new Game(screen);
+                state = game->Run();
+                break;
+        }
+    }
+
+    SDL_Quit();
 }

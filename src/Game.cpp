@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(SDL_Surface* sc) {
+Game::Game(SDL_Surface *sc) {
     screen = sc;
     Init();
 }
@@ -24,7 +24,7 @@ bool Game::Init() {
     dragonPosition->h = 44;
 }
 
-void Game::Run() {
+GameState Game::Run() {
     FPS_Initial();
     gameRunning = true;
     while (gameRunning) {
@@ -34,7 +34,8 @@ void Game::Run() {
         FPS_Fn();
         SDL_Flip(screen);
     }
-    SDL_Quit();
+
+    return currentGameState;
 }
 
 void Game::gameMainLoop() {
@@ -129,6 +130,9 @@ void Game::handleEvent() {
         if (bKeyDOWN) dragonPosition->y = dragonPosition->y + 1;
         if (bKeyLEFT) dragonPosition->x = dragonPosition->x - 1;
         if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
-        if (bKeyESCAPE) currentGameState = GameState::menu;
+        if (bKeyESCAPE) {
+            currentGameState = GameState::menu;
+            gameRunning = false;
+        }
     }
 }
