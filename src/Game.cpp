@@ -26,8 +26,8 @@ bool Game::Init() {
 
 GameState Game::Run() {
     FPS_Initial();
-    gameRunning = true;
-    while (gameRunning) {
+    running = true;
+    while (running) {
         aTick++;
         handleEvent();
         gameMainLoop();
@@ -47,18 +47,6 @@ void Game::gameMainLoop() {
     co->draw();
     points += co->detectColision(fl->getFlamePositions());
     hd->draw(points, ammo->getAmmo());
-}
-
-void Game::FPS_Initial() {
-    NextTick = 0;
-    interval = 1 * 1000 / FPS;
-    return;
-}
-
-void Game::FPS_Fn() {
-    if (NextTick > SDL_GetTicks()) SDL_Delay(NextTick - SDL_GetTicks());
-    NextTick = SDL_GetTicks() + interval;
-    return;
 }
 
 void Game::handleEvent() {
@@ -120,7 +108,7 @@ void Game::handleEvent() {
                 }
                 break;
             case SDL_QUIT:
-                gameRunning = false;
+                running = false;
                 break;
         }
 
@@ -132,7 +120,7 @@ void Game::handleEvent() {
         if (bKeyRIGHT) dragonPosition->x = dragonPosition->x + 1;
         if (bKeyESCAPE) {
             currentGameState = GameState::menu;
-            gameRunning = false;
+            running = false;
         }
     }
 }
