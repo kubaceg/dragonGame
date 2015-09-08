@@ -3,7 +3,7 @@
 
 
 #include "../GameState.h"
-#include "FontHelper.h"
+#include "../Lib/FontHelper.h"
 #include "../Lib/Loop.h"
 #include <string>
 #include <vector>
