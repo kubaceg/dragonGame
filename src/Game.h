@@ -1,14 +1,14 @@
 #ifndef GAME_H
 #define    GAME_H
 
-#include "Dragon.h"
-#include "World.h"
-#include "Coins.h"
-#include "Flames.h"
+#include "GameObjects/Dragon.h"
+#include "GameObjects/World.h"
+#include "GameObjects/Coins.h"
+#include "GameObjects/Flames.h"
+#include "GameObjects/Ammo.h"
 #include "Hud/Hud.h"
 #include "Hud/Menu.h"
 #include "Lib/Loop.h"
-#include "Ammo.h"
 #include "GameState.h"
 
 class Game : public Loop {
